@@ -1,0 +1,26 @@
+name: Build Windows ARM64 (Rust)
+
+on:
+  workflow_dispatch: # 允许在网页端手动点击触发
+
+jobs:
+  build-arm64:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain (ARM64 target)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-pc-windows-msvc
+
+      - name: Build Release binary
+        run: cargo build --release --target aarch64-pc-windows-msvc
+
+      - name: Upload ARM64 executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: misterdownloadmanager-win-arm64
+          path: target/aarch64-pc-windows-msvc/release/*.exe
